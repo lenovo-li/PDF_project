@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="framework">
+      <UniqueIdentifier>{500838f3-acbb-5fb2-940b-f72261492258}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="unit">
+      <UniqueIdentifier>{459b1819-e2f3-5f36-9c2b-c860fa8a844f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="framework\TestMain.cpp">
+      <Filter>framework</Filter>
+    </ClCompile>
+    <ClCompile Include="unit\DocumentTest.cpp">
+      <Filter>unit</Filter>
+    </ClCompile>
+    <ClCompile Include="unit\PageGeometryTest.cpp">
+      <Filter>unit</Filter>
+    </ClCompile>
+    <ClCompile Include="unit\QpdfOpsTest.cpp">
+      <Filter>unit</Filter>
+    </ClCompile>
+    <ClInclude Include="framework\Test.h">
+      <Filter>framework</Filter>
+    </ClInclude>
+    <ClInclude Include="framework\TestEngine.h">
+      <Filter>framework</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

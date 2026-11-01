@@ -1,0 +1,39 @@
+# EditorConfig — https://editorconfig.org
+#
+# 这些值是从现有代码实测出来的，不是理想值：C++ 源码 100% 用空格缩进、
+# 宽度 4。所以这份配置的作用是「不让新贡献者的编辑器改变现状」，
+# 而不是推行一套新风格。
+
+root = true
+
+[*]
+charset = utf-8
+end_of_line = crlf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 4
+
+[*.{cpp,h,hpp}]
+indent_style = space
+indent_size = 4
+# 现有代码大致按 96 列折行；这里不设硬限制，只作提示
+max_line_length = 96
+
+[*.md]
+# Markdown 里行尾双空格是硬换行语法，删掉会改变渲染结果
+trim_trailing_whitespace = false
+
+[*.{yml,yaml,json}]
+indent_size = 2
+
+[*.{vcxproj,filters,slnx,rc,manifest}]
+# MSBuild 与资源文件由 VS 生成，交给它自己管
+indent_size = 2
+trim_trailing_whitespace = false
+
+[CMakeLists.txt]
+indent_size = 4
+
+[*.bat]
+end_of_line = crlf

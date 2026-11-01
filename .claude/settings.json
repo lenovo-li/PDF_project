@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "additionalDirectories": ["../Fluent"],
+    "allow": [
+      "Bash(python scripts/check_project.py)",
+      "Bash(python scripts/check_project.py *)",
+      "Bash(python scripts/fetch_pdfium.py)",
+      "Bash(python scripts/restore_deps.py)",
+      "Bash(python scripts/gen_filters.py *)",
+      "Bash(\"C:/Program Files/Microsoft Visual Studio/18/Community/MSBuild/Current/Bin/MSBuild.exe\" PDFTool.slnx *)",
+      "Bash(./x64/Debug/PDFCoreTests.exe)",
+      "Bash(./x64/Debug/PDFCoreTests.exe *)",
+      "Bash(./x64/Release/PDFCoreTests.exe)",
+      "Bash(./x64/Release/PDFCoreTests.exe *)",
+      "Bash(git status *)",
+      "Bash(git diff *)",
+      "Bash(git log *)"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python",
+            "args": ["${CLAUDE_PROJECT_DIR}/.claude/hooks/check-project-files.py"],
+            "timeout": 30,
+            "statusMessage": "check_project.py (project files)"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "compact|resume",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python",
+            "args": ["${CLAUDE_PROJECT_DIR}/.claude/hooks/session-resume.py"],
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

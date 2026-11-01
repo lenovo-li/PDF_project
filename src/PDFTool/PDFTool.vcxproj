@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  PDFTool: the GUI app. Links FluentUI + FluentSettings (from ../Fluent via
+  ProjectReference) and PDFCore. The include root for FluentUI is the Fluent
+  repo root, so headers are written <FluentUI/...>; ConfigStore.h is found
+  through the FluentSettings directory, as in FluentUIDemo.
+-->
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>18.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{c2e5b8f1-7a4d-4c39-8e16-3b9d0a5f7c42}</ProjectGuid>
+    <RootNamespace>PDFTool</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries Condition="'$(Configuration)'=='Debug'">true</UseDebugLibraries>
+    <UseDebugLibraries Condition="'$(Configuration)'=='Release'">false</UseDebugLibraries>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <Import Project="$(PDFToolRoot)build\PDFCore.Consumer.props" />
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <!-- FluentUI is compiled at /W3 in its own repo; treat its headers as external
+           so this project's /W4 reports only on PDFTool code. -->
+      <AdditionalOptions>/external:I"$(FluentRoot)." /external:I"$(FluentRoot)FluentSettings" %(AdditionalOptions)</AdditionalOptions>
+      <PreprocessorDefinitions>_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+    <Manifest>
+      <!-- PerMonitorV2 DPI awareness, long paths, Win10/11 supportedOS. -->
+      <AdditionalManifestFiles>app.manifest %(AdditionalManifestFiles)</AdditionalManifestFiles>
+    </Manifest>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="MainWindow.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="MainWindow.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.manifest" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="$(FluentRoot)FluentUI\FluentUI.vcxproj">
+      <Project>{dcce72dd-3d48-4f95-9746-89b4ec20677e}</Project>
+    </ProjectReference>
+    <ProjectReference Include="$(FluentRoot)FluentSettings\FluentSettings.vcxproj">
+      <Project>{a5f1c3e2-7b84-4d16-9c0a-2e6f8d3b1a44}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\PDFCore\PDFCore.vcxproj">
+      <Project>{4d7c2a1e-5b3f-4e8a-9c61-0f2d8b7a3e10}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+</Project>

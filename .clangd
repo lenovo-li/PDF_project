@@ -1,0 +1,21 @@
+# Editor-only: lets clangd parse sources the way MSBuild compiles them.
+# MSBuild (PDFTool.slnx) remains the authority; keep these flags in step with
+# Directory.Build.props and build/PDFCore.Consumer.props. Paths are absolute
+# because clangd resolves relative -I against each file, not this config;
+# edit them if the repos live elsewhere. One known clang-only diagnostic in
+# a FluentUI header (LayoutCostProbe default member initializer) is harmless:
+# MSVC accepts it.
+CompileFlags:
+  Add:
+    - --driver-mode=cl
+    - /std:c++20
+    - /EHsc
+    - /DUNICODE
+    - /D_UNICODE
+    - /DNOMINMAX
+    - /D_WINDOWS
+    - /ID:/project/PDF_project/src
+    - /ID:/project/PDF_project/third_party/pdfium/include
+    - /ID:/project/PDF_project/vcpkg_installed/x64-windows-static/include
+    - /ID:/project/Fluent
+    - /ID:/project/Fluent/FluentSettings

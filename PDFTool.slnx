@@ -1,0 +1,12 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+  </Configurations>
+  <Folder Name="/Fluent/">
+    <Project Path="../Fluent/FluentUI/FluentUI.vcxproj" Id="dcce72dd-3d48-4f95-9746-89b4ec20677e" />
+    <Project Path="../Fluent/FluentSettings/FluentSettings.vcxproj" Id="a5f1c3e2-7b84-4d16-9c0a-2e6f8d3b1a44" />
+  </Folder>
+  <Project Path="src/PDFCore/PDFCore.vcxproj" Id="4d7c2a1e-5b3f-4e8a-9c61-0f2d8b7a3e10" />
+  <Project Path="src/PDFTool/PDFTool.vcxproj" Id="c2e5b8f1-7a4d-4c39-8e16-3b9d0a5f7c42" />
+  <Project Path="tests/PDFCoreTests.vcxproj" Id="8a1f6c3d-2e9b-4d57-b0a4-6c3e1f9d2b75" />
+</Solution>

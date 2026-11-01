@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Shared settings for every project under this repo (src/, tests/). MSBuild
+  looks for this file upward from each project directory, so it does NOT apply
+  to the FluentUI/FluentSettings projects referenced from ../Fluent; those keep
+  their own settings. The values here are chosen to match them: v145, C++20,
+  static CRT. Mixing /MT and /MD with FluentUI.lib fails at link time (LNK2038).
+-->
+<Project>
+  <PropertyGroup>
+    <PDFToolRoot>$(MSBuildThisFileDirectory)</PDFToolRoot>
+    <FluentRoot>$(MSBuildThisFileDirectory)..\Fluent\</FluentRoot>
+    <PdfiumRoot>$(MSBuildThisFileDirectory)third_party\pdfium\</PdfiumRoot>
+    <PlatformToolset>v145</PlatformToolset>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <CharacterSet>Unicode</CharacterSet>
+    <OutDir>$(PDFToolRoot)$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(PDFToolRoot)obj\$(MSBuildProjectName)\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <ConformanceMode>true</ConformanceMode>
+      <WarningLevel>Level4</WarningLevel>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <PreprocessorDefinitions>NOMINMAX;UNICODE;_UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)'=='Debug'">_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)'=='Release'">NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)'=='Debug'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)'=='Release'">MultiThreaded</RuntimeLibrary>
+      <Optimization Condition="'$(Configuration)'=='Debug'">Disabled</Optimization>
+      <Optimization Condition="'$(Configuration)'=='Release'">MaxSpeed</Optimization>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+</Project>

@@ -1,0 +1,19 @@
+# Build output
+x64/
+obj/
+*.user
+.vs/
+*.aps
+
+# Restored dependencies (python scripts/restore_deps.py)
+third_party/pdfium/
+vcpkg_installed/
+
+# clangd
+compile_commands.json
+.cache/
+
+# Claude Code local state
+.claude/TASK_STATE.md
+.claude/settings.local.json
+.claude/*.log

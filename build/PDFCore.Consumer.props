@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Imported by PDFCore itself and by every project that links it (PDFTool,
+  PDFCoreTests). Puts the PDFium headers on the include path, links the
+  import library, and copies pdfium.dll next to the built exe.
+
+  PDFium comes from third_party/pdfium (python scripts/fetch_pdfium.py).
+  qpdf (+ zlib, libjpeg-turbo) comes from vcpkg manifest mode, installed into
+  vcpkg_installed/ by python scripts/restore_deps.py, triplet x64-windows-static
+  (static CRT, matching FluentUI). We link it explicitly instead of using
+  "vcpkg integrate install", which would change every MSBuild project for this
+  Windows user. The build fails early with a clear message if either is
+  missing, instead of a wall of "header not found" errors.
+-->
+<Project>
+  <PropertyGroup>
+    <VcpkgTripletDir>$(PDFToolRoot)vcpkg_installed\x64-windows-static\</VcpkgTripletDir>
+    <VcpkgLibDir Condition="'$(Configuration)'=='Debug'">$(VcpkgTripletDir)debug\lib\</VcpkgLibDir>
+    <VcpkgLibDir Condition="'$(Configuration)'!='Debug'">$(VcpkgTripletDir)lib\</VcpkgLibDir>
+    <ZlibName Condition="'$(Configuration)'=='Debug'">zsd.lib</ZlibName>
+    <ZlibName Condition="'$(Configuration)'!='Debug'">zs.lib</ZlibName>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(PDFToolRoot)src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <!-- Third-party headers are "external" (ExternalWarningLevel is off in
+           Directory.Build.props), so /W4 only reports on our code.
+           -->
+      <AdditionalOptions>/external:I"$(PdfiumRoot)include" /external:I"$(VcpkgTripletDir)include" %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>$(PdfiumRoot)lib\pdfium.dll.lib;$(VcpkgLibDir)qpdf.lib;$(VcpkgLibDir)jpeg.lib;$(VcpkgLibDir)$(ZlibName);advapi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+
+  <Target Name="PDFToolCheckPdfium" BeforeTargets="ClCompile">
+    <Error Condition="!Exists('$(PdfiumRoot)include\fpdfview.h')"
+           Text="PDFium not found in $(PdfiumRoot). Run: python scripts/fetch_pdfium.py" />
+    <Error Condition="!Exists('$(VcpkgTripletDir)include\qpdf\QPDF.hh')"
+           Text="qpdf not found in $(VcpkgTripletDir). Run: python scripts/restore_deps.py" />
+  </Target>
+
+  <Target Name="PDFToolCopyPdfiumDll" AfterTargets="Build"
+          Condition="'$(ConfigurationType)'=='Application'">
+    <Copy SourceFiles="$(PdfiumRoot)bin\pdfium.dll" DestinationFolder="$(OutDir)"
+          SkipUnchangedFiles="true" />
+  </Target>
+</Project>
