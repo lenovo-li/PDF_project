@@ -31,14 +31,29 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="framework\FormFixture.h" />
     <ClInclude Include="framework\Test.h" />
     <ClInclude Include="framework\TestEngine.h" />
+    <ClInclude Include="framework\ZipReader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="framework\TestMain.cpp" />
+    <ClCompile Include="unit\AnnotationsTest.cpp" />
+    <ClCompile Include="unit\RecentFilesTest.cpp" />
+    <ClCompile Include="unit\ConvertAnalyzeTest.cpp" />
+    <ClCompile Include="unit\ConvertTest.cpp" />
+    <ClCompile Include="unit\ConvertWriteTest.cpp" />
+    <ClCompile Include="unit\FormsTest.cpp" />
     <ClCompile Include="unit\DocumentTest.cpp" />
+    <ClCompile Include="unit\DocumentStoreTest.cpp" />
+    <ClCompile Include="unit\PageLayoutTest.cpp" />
+    <ClCompile Include="unit\PageOpsTest.cpp" />
+    <ClCompile Include="unit\PageRangeTest.cpp" />
+    <ClCompile Include="unit\ImageExportTest.cpp" />
     <ClCompile Include="unit\PageGeometryTest.cpp" />
     <ClCompile Include="unit\QpdfOpsTest.cpp" />
+    <ClCompile Include="unit\RenderTest.cpp" />
+    <ClCompile Include="unit\TextSearchTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\src\PDFCore\PDFCore.vcxproj">

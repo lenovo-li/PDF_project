@@ -7,7 +7,7 @@ pdf2docx、PyMuPDF 等）。新增依赖前先问用户，并在这里登记。
 |---|---|---|---|---|
 | PDFium | chromium/8125 | BSD-3-Clause（部分 Apache-2.0） | bblanchon/pdfium-binaries 预编译包，`scripts/fetch_pdfium.py` | 渲染、文本提取、页面对象编辑、表单、注释 |
 | qpdf | 12.4.2 | Apache-2.0 | vcpkg（`vcpkg.json`，builtin-baseline 固定） | 合并、拆分、加密/解密、线性化、修复 |
-| zlib | vcpkg | Zlib | qpdf 依赖 | |
+| zlib | vcpkg | Zlib | qpdf 依赖；PDFCore 也直接使用 | 转 Word 时生成 .docx（zip deflate、CRC-32） |
 | libjpeg-turbo | 3.2.0 | IJG / BSD-3-Clause | qpdf 依赖 | |
 | FluentUI / FluentSettings | 同级仓库 `../Fluent` | 用户自有（MIT） | ProjectReference | UI 框架、配置持久化 |
 | nlohmann/json | Fluent 内置 | MIT | `../Fluent/FluentSettings/third_party` | 配置 JSON |

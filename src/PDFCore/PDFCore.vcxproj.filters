@@ -1,19 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <Filter Include="convert">
+      <UniqueIdentifier>{9008ef6f-d293-5a1f-9bd2-6d85a7056eb3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Annotations.cpp" />
+    <ClCompile Include="RecentFiles.cpp" />
+    <ClCompile Include="convert\Analyze.cpp">
+      <Filter>convert</Filter>
+    </ClCompile>
+    <ClCompile Include="convert\Convert.cpp">
+      <Filter>convert</Filter>
+    </ClCompile>
+    <ClCompile Include="convert\DocxWriter.cpp">
+      <Filter>convert</Filter>
+    </ClCompile>
+    <ClCompile Include="convert\Extract.cpp">
+      <Filter>convert</Filter>
+    </ClCompile>
+    <ClCompile Include="convert\ZipWriter.cpp">
+      <Filter>convert</Filter>
+    </ClCompile>
+    <ClCompile Include="Forms.cpp" />
+    <ClCompile Include="BitmapCache.cpp" />
     <ClCompile Include="Document.cpp" />
+    <ClCompile Include="DocumentStore.cpp" />
     <ClCompile Include="Engine.cpp" />
+    <ClCompile Include="PageLayout.cpp" />
+    <ClCompile Include="PageOps.cpp" />
+    <ClCompile Include="PageRange.cpp" />
     <ClCompile Include="FileIO.cpp" />
+    <ClCompile Include="ImageExport.cpp" />
     <ClCompile Include="PageGeometry.cpp" />
     <ClCompile Include="QpdfOps.cpp" />
+    <ClCompile Include="Render.cpp" />
+    <ClCompile Include="TextSearch.cpp" />
+    <ClInclude Include="Annotations.h" />
+    <ClInclude Include="CommandLine.h" />
+    <ClInclude Include="RecentFiles.h" />
+    <ClInclude Include="convert\Analyze.h">
+      <Filter>convert</Filter>
+    </ClInclude>
+    <ClInclude Include="convert\Convert.h">
+      <Filter>convert</Filter>
+    </ClInclude>
+    <ClInclude Include="convert\DocxWriter.h">
+      <Filter>convert</Filter>
+    </ClInclude>
+    <ClInclude Include="convert\Extract.h">
+      <Filter>convert</Filter>
+    </ClInclude>
+    <ClInclude Include="convert\Model.h">
+      <Filter>convert</Filter>
+    </ClInclude>
+    <ClInclude Include="convert\ZipWriter.h">
+      <Filter>convert</Filter>
+    </ClInclude>
+    <ClInclude Include="Forms.h" />
+    <ClInclude Include="BitmapCache.h" />
     <ClInclude Include="Document.h" />
+    <ClInclude Include="DocumentStore.h" />
     <ClInclude Include="Engine.h" />
+    <ClInclude Include="PageLayout.h" />
+    <ClInclude Include="PageOps.h" />
+    <ClInclude Include="PageRange.h" />
     <ClInclude Include="FileIO.h" />
+    <ClInclude Include="ImageExport.h" />
     <ClInclude Include="PageGeometry.h" />
     <ClInclude Include="QpdfOps.h" />
+    <ClInclude Include="Render.h" />
+    <ClInclude Include="TextSearch.h" />
     <ClInclude Include="Result.h" />
     <ClInclude Include="Trace.h" />
+    <ClInclude Include="UnitMapping.h" />
   </ItemGroup>
 </Project>

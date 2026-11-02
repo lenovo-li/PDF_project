@@ -114,3 +114,20 @@ TEST(FileIO, ReadRefusesOversizedFile) {
     EXPECT_FALSE(ReadWholeFile(path, 50).ok());
     DeleteFileW(path.c_str());
 }
+
+TEST(FileIO, WideToUtf8AndNumberedPath) {
+    EXPECT_TRUE(WideToUtf8(L"abc") == "abc");
+    EXPECT_TRUE(WideToUtf8(L"") == "");
+    EXPECT_TRUE(WideToUtf8(L"密码") == "\xE5\xAF\x86\xE7\xA0\x81");
+    EXPECT_TRUE(NumberedPath(LR"(C:\out\book.PDF)", 3, 12) == LR"(C:\out\book_03.pdf)");
+    EXPECT_TRUE(NumberedPath(LR"(C:\out\book)", 1, 5) == LR"(C:\out\book_1.pdf)");
+    EXPECT_TRUE(NumberedPath(L"x.pdf", 10, 100) == L"x_010.pdf");
+}
+
+TEST(Document, IsPasswordErrorOnlyForPasswordFailures) {
+    // FPDF_ERR_PASSWORD must match the enum value observed for real encrypted
+    // files; OpeningEncryptedFileReportsPasswordError in QpdfOpsTest checks that.
+    EXPECT_TRUE(IsPasswordError(Error{L"x", FPDF_ERR_PASSWORD}));
+    EXPECT_FALSE(IsPasswordError(Error{L"x", FPDF_ERR_FORMAT}));
+    EXPECT_FALSE(IsPasswordError(Error{L"x", 0}));
+}

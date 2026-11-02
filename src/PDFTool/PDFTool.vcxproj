@@ -46,11 +46,32 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="controls\PageBitmapSource.h" />
+    <ClInclude Include="controls\PdfPageView.h" />
+    <ClInclude Include="controls\ThumbnailStrip.h" />
     <ClInclude Include="MainWindow.h" />
+    <ClInclude Include="dialogs\FillFormDialog.h" />
+    <ClInclude Include="ConvertRunner.h" />
+    <ClInclude Include="SearchRunner.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="controls\PageBitmapSource.cpp" />
+    <ClCompile Include="controls\PdfPageView.cpp" />
+    <ClCompile Include="controls\PdfPageViewAnnot.cpp" />
+    <ClCompile Include="controls\PdfPageViewText.cpp" />
+    <ClCompile Include="controls\ThumbnailStrip.cpp" />
     <ClCompile Include="MainWindow.cpp" />
+    <ClCompile Include="MainWindowAnnot.cpp" />
+    <ClCompile Include="MainWindowForms.cpp" />
+    <ClCompile Include="dialogs\FillFormDialog.cpp" />
+    <ClCompile Include="ConvertRunner.cpp" />
+    <ClCompile Include="MainWindowConvert.cpp" />
+    <ClCompile Include="MainWindowRecent.cpp" />
+    <ClCompile Include="SearchRunner.cpp" />
+    <ClCompile Include="MainWindowDocument.cpp" />
+    <ClCompile Include="MainWindowTools.cpp" />
+    <ClCompile Include="MainWindowSearch.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.manifest" />

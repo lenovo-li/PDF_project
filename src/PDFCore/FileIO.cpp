@@ -4,6 +4,8 @@
 
 #include <windows.h>
 
+#include <cwctype>
+
 namespace pdf {
 
 namespace {
@@ -81,6 +83,30 @@ Status WriteFileAtomic(const std::wstring& path, const std::vector<std::uint8_t>
         return e;
     }
     return Ok{};
+}
+
+std::string WideToUtf8(const std::wstring& s) {
+    if (s.empty()) return {};
+    const int n = WideCharToMultiByte(CP_UTF8, 0, s.data(), static_cast<int>(s.size()), nullptr,
+                                      0, nullptr, nullptr);
+    if (n <= 0) return {};
+    std::string out(static_cast<std::size_t>(n), '\0');
+    WideCharToMultiByte(CP_UTF8, 0, s.data(), static_cast<int>(s.size()), out.data(), n, nullptr,
+                        nullptr);
+    return out;
+}
+
+std::wstring NumberedPath(const std::wstring& base, int n, int count) {
+    std::wstring stem = base;
+    if (stem.size() >= 4) {
+        std::wstring ext = stem.substr(stem.size() - 4);
+        for (auto& c : ext) c = static_cast<wchar_t>(towlower(c));
+        if (ext == L".pdf") stem.resize(stem.size() - 4);
+    }
+    const int width = static_cast<int>(std::to_wstring(count < 1 ? 1 : count).size());
+    std::wstring num = std::to_wstring(n);
+    if (static_cast<int>(num.size()) < width) num.insert(0, width - num.size(), L'0');
+    return stem + L"_" + num + L".pdf";
 }
 
 }  // namespace pdf

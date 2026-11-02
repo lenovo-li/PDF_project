@@ -12,7 +12,40 @@
     <ClCompile Include="framework\TestMain.cpp">
       <Filter>framework</Filter>
     </ClCompile>
+    <ClCompile Include="unit\AnnotationsTest.cpp">
+      <Filter>unit</Filter>
+    </ClCompile>
+    <ClCompile Include="unit\RecentFilesTest.cpp">
+      <Filter>unit</Filter>
+    </ClCompile>
+    <ClCompile Include="unit\ConvertAnalyzeTest.cpp">
+      <Filter>unit</Filter>
+    </ClCompile>
+    <ClCompile Include="unit\ConvertTest.cpp">
+      <Filter>unit</Filter>
+    </ClCompile>
+    <ClCompile Include="unit\ConvertWriteTest.cpp">
+      <Filter>unit</Filter>
+    </ClCompile>
+    <ClCompile Include="unit\FormsTest.cpp">
+      <Filter>unit</Filter>
+    </ClCompile>
     <ClCompile Include="unit\DocumentTest.cpp">
+      <Filter>unit</Filter>
+    </ClCompile>
+    <ClCompile Include="unit\DocumentStoreTest.cpp">
+      <Filter>unit</Filter>
+    </ClCompile>
+    <ClCompile Include="unit\PageLayoutTest.cpp">
+      <Filter>unit</Filter>
+    </ClCompile>
+    <ClCompile Include="unit\PageOpsTest.cpp">
+      <Filter>unit</Filter>
+    </ClCompile>
+    <ClCompile Include="unit\PageRangeTest.cpp">
+      <Filter>unit</Filter>
+    </ClCompile>
+    <ClCompile Include="unit\ImageExportTest.cpp">
       <Filter>unit</Filter>
     </ClCompile>
     <ClCompile Include="unit\PageGeometryTest.cpp">
@@ -21,10 +54,22 @@
     <ClCompile Include="unit\QpdfOpsTest.cpp">
       <Filter>unit</Filter>
     </ClCompile>
+    <ClCompile Include="unit\RenderTest.cpp">
+      <Filter>unit</Filter>
+    </ClCompile>
+    <ClCompile Include="unit\TextSearchTest.cpp">
+      <Filter>unit</Filter>
+    </ClCompile>
+    <ClInclude Include="framework\FormFixture.h">
+      <Filter>framework</Filter>
+    </ClInclude>
     <ClInclude Include="framework\Test.h">
       <Filter>framework</Filter>
     </ClInclude>
     <ClInclude Include="framework\TestEngine.h">
+      <Filter>framework</Filter>
+    </ClInclude>
+    <ClInclude Include="framework\ZipReader.h">
       <Filter>framework</Filter>
     </ClInclude>
   </ItemGroup>

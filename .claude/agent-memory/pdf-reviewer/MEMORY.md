@@ -1,0 +1,1 @@
+- [Engine-thread contract and recurring defects](pattern_engine_thread_contract.md) — thread rule; generation races; modals; output paths; caps; normalized compares; PDFium callbacks; test gaps

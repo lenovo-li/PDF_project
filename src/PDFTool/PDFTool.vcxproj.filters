@@ -1,11 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <Filter Include="controls">
+      <UniqueIdentifier>{58036b49-f270-5fb2-9d54-96d4cc7be1f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dialogs">
+      <UniqueIdentifier>{e3493f75-4f14-5b9c-b97b-f8a67b63a747}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="controls\PageBitmapSource.cpp">
+      <Filter>controls</Filter>
+    </ClCompile>
+    <ClCompile Include="controls\PdfPageView.cpp">
+      <Filter>controls</Filter>
+    </ClCompile>
+    <ClCompile Include="controls\PdfPageViewAnnot.cpp">
+      <Filter>controls</Filter>
+    </ClCompile>
+    <ClCompile Include="controls\PdfPageViewText.cpp">
+      <Filter>controls</Filter>
+    </ClCompile>
+    <ClCompile Include="controls\ThumbnailStrip.cpp">
+      <Filter>controls</Filter>
+    </ClCompile>
     <ClCompile Include="MainWindow.cpp" />
+    <ClCompile Include="MainWindowAnnot.cpp" />
+    <ClCompile Include="MainWindowForms.cpp" />
+    <ClCompile Include="dialogs\FillFormDialog.cpp">
+      <Filter>dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="ConvertRunner.cpp" />
+    <ClCompile Include="MainWindowConvert.cpp" />
+    <ClCompile Include="MainWindowRecent.cpp" />
+    <ClCompile Include="SearchRunner.cpp" />
+    <ClCompile Include="MainWindowDocument.cpp" />
+    <ClCompile Include="MainWindowTools.cpp" />
+    <ClCompile Include="MainWindowSearch.cpp" />
+    <ClInclude Include="controls\PageBitmapSource.h">
+      <Filter>controls</Filter>
+    </ClInclude>
+    <ClInclude Include="controls\PdfPageView.h">
+      <Filter>controls</Filter>
+    </ClInclude>
+    <ClInclude Include="controls\ThumbnailStrip.h">
+      <Filter>controls</Filter>
+    </ClInclude>
     <ClInclude Include="MainWindow.h" />
+    <ClInclude Include="dialogs\FillFormDialog.h">
+      <Filter>dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="ConvertRunner.h" />
+    <ClInclude Include="SearchRunner.h" />
     <None Include="app.manifest" />
   </ItemGroup>
 </Project>

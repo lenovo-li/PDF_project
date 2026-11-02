@@ -4,11 +4,19 @@
 
 | 功能 | 状态 | 实现 | 限制 |
 |---|---|---|---|
-| 打开 PDF（页数） | 已有骨架 | `pdf::Document::Open`（PDFium，引擎线程） | 整文件读入内存，上限 2 GiB |
-| 合并 | 引擎已有，无 UI | `pdf::MergeFiles`（qpdf） | 不处理表单/书签合并 |
-| 页面查看/缩放 | 未开始 | | |
-| 拆分/提取页 | 未开始 | | |
-| 加密/解密 | 未开始 | | |
-| 压缩/优化 | 未开始 | | |
-| 注释/编辑 | 未开始 | | |
-| PDF 转 Word | 未开始 | 见 `.claude/rules/conversion.md` | |
+| 打开 PDF | 完成 | `pdf::Document::Open`（PDFium，引擎线程） | 整文件读入内存，上限 2 GiB |
+| 合并 | 完成（界面见"拆分/提取/合并"） | `pdf::MergeFiles`（qpdf） | 不处理表单/书签合并 |
+| 页面渲染（引擎） | 完成（界面见"页面查看/缩放"） | `pdf::Document::RenderPage`（`FPDF_RenderPageBitmap`，白底 BGRA，含注释；有 AcroForm 时再用 `FPDF_FFLDraw` 画表单控件）；尺寸由 `pdf::RenderSizePx` 按 DPI 计算；`pdf::BitmapCache` 按字节预算 LRU；`pdf::PageLayout` 连续滚动布局，可见页 O(log n) 查询 | 每边 ≤16384 px、单张 ≤256 MiB，超出返回错误；单页渲染不可取消，极重的页面会阻塞引擎队列 |
+| 页面查看/缩放 | 完成，待真机检查 | `PdfPageView`（`src/PDFTool/controls/`）：连续滚动，只画/只渲染可见页；文档在引擎线程的 `pdf::DocumentStore`，UI 只持 id；页面尺寸来自 `Document::DisplayedPageSizesPt`（不加载页面）。Ctrl+滚轮 / Ctrl±0 缩放（10 %–800 %，锚定顶部页），Shift+滚轮横滚，PgUp/PgDn/Home/End/方向键；工具栏 打开/缩小/放大/适合宽度 | ≤100000 页；单边 >144000 pt 或无法读取的页按 Letter 显示；每页位图 ≤64 MiB 且不超过显卡纹理上限，超出则拉伸（略糊）；CPU 缓存 192 MiB；单页渲染不可取消；关闭窗口时要等引擎队列排空，进程可能晚一点退出；约 10 万页时 float 精度使滚动步长变粗 |
+| 缩略图栏 / 页码跳转 | 完成，待真机检查 | `ThumbnailStrip`（左侧 168 DIP）：每页按比例缩进 120×150 盒（`pdf::FitPagesInBox`），只画/只渲染可见缩略图，自有 48 MiB 缓存；点击跳页，当前页高亮并自动滚入视野。工具栏页码框（数字过滤，回车跳转并夹到 1..N）。页面查看器与缩略图共用 `PageBitmapSource`（渲染、缓存、过期任务跳过、设备丢失） | 缩略图不可拖动排序（第 6 项页面操作时再做）；缩略图栏宽度固定，不能拖动调整；页码框只在回车时提交 |
+| 文本搜索 / 高亮 / 复制 | 完成，待真机检查 | `pdf::SearchPage`、`SelectText`、`PageText`（FPDFText_*）；`SearchRunner` 每 8 页一块在引擎线程上与渲染交替，可取消。工具栏搜索框，回车/F3 下一处，Shift+回车/Shift+F3 上一处，Ctrl+F 定位搜索框，Esc 清除；拖动选择文字，Ctrl+C 复制 | 每页 ≤1000 处、总计 ≤10000 处（超出显示"N+"）；查询 ≤256 字；只能在一页内选择；扫描件没有文字层，搜不到（需 OCR）；不区分大小写，暂无选项界面 |
+| 页面操作 | 完成，待真机检查 | "页面"菜单：左/右旋转、上移/下移、插入空白页（与当前页同尺寸）、从文件插入、删除当前页、保存（Ctrl+S）、另存为（Ctrl+Shift+S）；改动在引擎线程的文档上进行，标题栏 * 表示未保存；引擎 `pdf::RotatePages`、`DeletePages`、`InsertBlankPage`、`MovePages`、`ImportPages`，先校验全部页码再改 | 每次只操作当前页（多选页面待缩略图多选）；不能删除全部页面；≤100000 页；没有撤销 |
+| 拆分/提取/合并 | 完成，待真机检查 | "工具"菜单：合并其他 PDF（多选，接在当前文件后）、提取页面（"1,3,5-7"）、拆分（每 N 页一个文件，`名称_01.pdf`…）；`pdf::MergeFiles`、`ExtractPages`、`SplitFile`（qpdf） | 处理磁盘上的文件，有未保存修改时要求先保存；输出不加密 |
+| 加密/解密 | 完成，待真机检查 | 打开加密文件时弹密码框（错了可重试）；"工具→加密"设打开/所有者密码和权限，"移除密码"另存无密码副本；`pdf::EncryptPdf`（AES-256 R6）、`DecryptPdf`（qpdf）；编辑后保存会保留原加密 | 必须设所有者密码；密码只在内存里，不写日志、不存配置 |
+| 压缩/优化、导出 PNG | 完成，待真机检查 | "工具→压缩/优化"（可选线性化）；"当前页导出为 PNG"（200 dpi，含未保存的修改）；`pdf::CompressFile`（qpdf）、`pdf::SavePng`（WIC） | 不降采样图片，扫描件压缩有限；PNG 受渲染上限（每边 16384 px、256 MiB）约束 |
+| 注释/编辑 | 完成，待真机检查 | "注释"菜单：对选中文字应用高亮/下划线/删除线（`AddMarkupForChars`），便签/文字框/矩形/手绘工具（点击或拖动创建），删除选中注释（Del 键或菜单）。双击便签/文字框编辑内容；注释绘制在页面位图上（`FPDF_ANNOT` 标志），选中注释画边框。引擎：`pdf::ListAnnotations`、`AddNote`、`AddFreeText`、`AddSquare`、`AddInk`、`AddMarkupForChars`、`SetAnnotationText`、`RemoveAnnotation`、`UnitRectToPage`、`UnitPointsToPage` | 颜色固定（高亮黄、下划线蓝、删除线红、便签黄、文字框黑、矩形红、手绘蓝），暂无颜色选择器；便签/文字框内容单行（无多行编辑）；手绘笔迹上限 10000 点；便签图标固定 20 pt；删除便签时关联的 Popup 一并删除；链接、表单控件、其他类型注释不可编辑；每页最多列出 500 个注释、内容合计 ≤1 MiB（超出的不可选中，但仍会绘制）；上一个注释编辑完成前，新的注释操作会被拒绝（状态栏提示）；选择工具下点在注释上优先选中注释，被高亮盖住的文字要先切到别处拖选；没有撤销 |
+| 表单填写 | 完成，待真机检查 | "工具→填写表单…"对话框列出所有字段（单行文本 TextBox、多行文本 TextArea、复选框、下拉框 ComboBox），只读字段灰显；应用后在引擎线程执行 `pdf::ApplyFormEdits`（文本字段 focus+select+replace，复选/单选模拟点击，下拉 SetIndexSelected），所有页面位图失效重绘；表单控件通过 `Document::Form()` 懒建的 FPDF_FORMHANDLE 渲染（`FPDF_FFLDraw`）；引擎：`pdf::HasForm`、`ListFormFields`（上限 500 字段 / 扫描 20000 个注释 / 每字段 1000 选项 / 文字合计 1 MiB，超出时对话框提示只显示了一部分）、`ApplyFormEdits` | 不支持纯 XFA 表单（构建不含 XFA；同时带 AcroForm 的混合文档按 AcroForm 填写）；值超过 64 K 字符的字段只读；多选列表框只能选一个值（应用时清掉其他选中项）；复选/单选只在状态确实改变时计为成功；JavaScript 禁用（回调全 null）；签名字段只列出不能编辑；单选按钮组显示为下拉框，选项是各按钮的 export value；字段名是全限定名（Parent.Child），同名控件共享值（跨页控件一起更新）；部分字段写入失败时状态栏显示"已应用 X / N"；多行字段里的换行统一为 
+ 写回 |
+| PDF 转 Word | 完成，待真机检查 | "工具→转为 Word…"选择 .docx 路径；`ConvertRunner` 每 4 页一个引擎任务提取（与渲染交替），状态栏显示进度，"工具→取消转换"可停止；最后一个任务分析、生成并原子写入。引擎：`pdf::ExtractPage`（FPDFText_* 字符、颜色、粗斜体；字号 = 名义字号 × `FPDFText_GetMatrix` 的纵向缩放，Office 导出的"大字号 + 小缩放"才不会错；文字页上的图片对象用 `FPDFImageObj_GetRenderedBitmap` 取出存 PNG）→ `Analyze`（基线成行、两栏检测、按间距/缩进/字号/短行分段、居中/右对齐、行距、按页面尺寸分节）→ `WriteDocx`（WordprocessingML + 自写 zip，zlib deflate）；文字少于 10 个字符的页（扫描件）以 150 dpi PNG 整页图片嵌入；文字页上的图片按位置插在上下段落之间 | 不识别表格、页眉页脚、列表、脚注、旋转文字、三栏以上；图片不按原位置浮动，作为独立段落插入；任一边小于 24 pt 的图片（图标）不转出；表单 XObject 里的图片不转出；每页最多 64 张、64 MiB；幻灯片类 PDF 的文本框窄于页面时，一段中文可能被拆成几段；表单字段的值不在文字层，不会转出；没有 OCR，扫描页只是图片；字体名只保留 ASCII（中文字体名如 GBK 编码的会丢失，回落到默认宋体/Times）；上限：5000 页、全文 400 万字符、扫描图片合计 1 GiB、Word 页面每边 ≤22 in（更大的页面按比例缩小）；转换期间对注释/表单的编辑可能只体现在部分页上（页面操作会取消转换并在状态栏说明）；取消后不会写出文件；某页超过 20 万字符时完成后弹窗提示 |
+| 状态栏 | 完成 | 窗口底部 `fluent::StatusBar`：左侧是操作消息（进度、结果、错误，`ShowStatus`），右侧是当前文档名、页数、缩放比例（滚动/缩放只更新右侧，不会冲掉左侧的消息） | 左侧过长的消息会被截断 |
+| 最近文件 / 拖放 / 命令行 / 设置 | 完成，待真机检查 | 工具栏"最近 ▾"列出最近 10 个文件（打开或保存成功后更新，`pdf::PushRecent` 去重、不区分大小写），可清除；把 PDF 拖到窗口任意处打开；`PDFTool.exe 文件.pdf` 启动即打开（`pdf::FileFromArgs`）；"工具→设置…"：主题（跟随系统/浅色/深色，立即生效并保存到 `theme.mode`）、清除最近文件、显示配置文件路径 | "跟随系统"只在启动和切换时读取系统主题，运行中系统切换不跟随；打不开的最近文件不会自动移除；拖入多个文件只打开第一个 PDF；配置存 `recent.0`…`recent.9`（ConfigStore 只支持标量） |
